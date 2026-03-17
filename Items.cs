@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGStore
+namespace MooonlightStore
 {
     public class Item : IEquatable<Item>
     {

@@ -1,21 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace RPGStore
+namespace MooonlightStore
 {
     public class Store
     {
         private readonly Dictionary<Item, int> inventory = new();
         public IReadOnlyDictionary<Item, int> Inventory => inventory;
 
+        // NUEVO CONSTRUCTOR: Regla 4a (La tienda no puede iniciar vacía)
+        public Store(Item initialItem, int initialQuantity)
+        {
+            if (initialItem == null) throw new ArgumentNullException(nameof(initialItem));
+            AddItem(initialItem, initialQuantity);
+        }
+
         public void AddItem(Item item, int quantity)
         {
             if (quantity < 0)
                 throw new ArgumentException("La cantidad no puede ser negativa");
+                
             foreach (var invItem in inventory.Keys)
             {
                 if (invItem.Name == item.Name && invItem.Category == item.Category && invItem.Price != item.Price)
-                    throw new InvalidOperationException("No se puede agregar el mismo artÃ­culo con diferente precio");
+                    throw new InvalidOperationException("No se puede agregar el mismo artículo con diferente precio");
             }
+            
             if (inventory.ContainsKey(item))
                 inventory[item] += quantity;
             else
@@ -36,10 +46,13 @@ namespace RPGStore
                     return false;
                 total += kvp.Key.Price * kvp.Value;
             }
+            
             if (player.Gold < total)
                 return false;
+                
             foreach (var kvp in itemsToBuy)
                 inventory[kvp.Key] -= kvp.Value;
+                
             player.Gold -= total;
             player.AddItems(itemsToBuy);
             return true;

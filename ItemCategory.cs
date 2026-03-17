@@ -1,4 +1,4 @@
-﻿namespace RPGStore
+﻿namespace MooonlightStore
 {
     public enum ItemCategory
     {
